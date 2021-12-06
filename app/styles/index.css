@@ -1,0 +1,97 @@
+.navigation-list {
+    list-style-type: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 40px;
+    margin-bottom: 80px;
+}
+
+.navigation-item {
+    color: var(--color-background);
+}
+
+.price {
+    font-size: 60px;
+    color: var(--color-secondary);
+}
+
+.header {
+    font-size: 50px;
+    font-weight: 300;
+    padding: 0 80px;
+}
+
+.explanation {
+    font-size: 16px;
+    color: var(--color-background);
+}
+
+.navigation-link {
+    background: var(--color-foreground);
+    text-align: center;
+    border-radius: 8px;
+}
+
+.navigation-link:hover {
+    text-decoration: none;
+    transition: all 0.3s ease-in;
+}
+
+.link-1 .price {
+    color: var(--chart-1);
+}
+
+.link-2 .price {
+    color: var(--chart-2);
+}
+
+.link-3 .price {
+    color: var(--chart-3);
+}
+
+.link-4 .price {
+    color: var(--chart-4);
+}
+
+.link-5 .price {
+    color: var(--chart-5);
+}
+
+.link-1:hover {
+    color: var(--chart-1);
+    background: var(--chart-highlight-1);
+}
+
+.link-2:hover {
+    color: var(--chart-2);
+    background: var(--chart-highlight-2);
+}
+.link-3:hover {
+    color: var(--chart-3);
+    background: var(--chart-highlight-3);
+}
+.link-4:hover {
+    color: var(--chart-4);
+    background: var(--chart-highlight-4);
+}
+.link-5:hover {
+    color: var(--chart-5);
+    background: var(--chart-highlight-5);
+}
+
+.navigation-link:hover .price {
+    transition: all 0.3s;
+    letter-spacing: 4px;
+    font-weight: 700;
+}
+
+.container {
+    padding: 0 80px 60px 80px;
+}
+
+.price-header {
+    font-weight: 300;
+    font-size: 50px;
+    text-align: center;
+}

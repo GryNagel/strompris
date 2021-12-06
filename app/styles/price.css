@@ -1,0 +1,86 @@
+.container {
+    padding: 40px 80px 0 80px;
+}
+
+.link-container {
+    padding: 20px 0 80px 0;
+    box-sizing: initial;
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+}
+
+.link {
+    background: var(--color-foreground);
+    text-align: center;
+    border-radius: 8px;
+    font-size: 28px;
+    padding: 10px 20px;
+}
+
+.link:hover {
+    color: var(--color-links);
+    text-decoration: none;
+    background: var(--color-highlight);
+    transition: background 0.3s ease-in, box-shadow 0.3s ease-in;
+}
+
+.price-container {
+    display: grid;
+    grid-template-rows: max-content 1fr max-content;
+    height: 100vh;
+}
+
+.link-1:hover {
+    color: var(--chart-1);
+    background: var(--chart-highlight-1);
+}
+
+.link-2:hover {
+    color: var(--chart-2);
+    background: var(--chart-highlight-2);
+}
+
+.link-3:hover {
+    color: var(--chart-3);
+    background: var(--chart-highlight-3);
+}
+
+.link-4:hover {
+    color: var(--chart-4);
+    background: var(--chart-highlight-4);
+}
+
+.link-5:hover {
+    color: var(--chart-5);
+    background: var(--chart-highlight-5);
+}
+
+.link-active.link-1 {
+    background: var(--chart-highlight-1);
+    box-shadow: 0 0 0 4px var(--chart-1);
+}
+
+.link-active.link-2 {
+    background: var(--chart-highlight-2);
+    box-shadow: 0 0 0 4px var(--chart-2);
+}
+
+.link-active.link-3 {
+    box-shadow: 0 0 0 4px var(--chart-3);
+    background: var(--chart-highlight-3);
+}
+
+.link-active.link-4 {
+    box-shadow: 0 0 0 4px var(--chart-4);
+    background: var(--chart-highlight-4);
+}
+
+.link-active.link-5 {
+    box-shadow: 0 0 0 4px var(--chart-5);
+    background: var(--chart-highlight-5);
+}
+
+.link-active {
+    transition: background 0.3s ease-in, box-shadow 0.3s ease-in;
+}

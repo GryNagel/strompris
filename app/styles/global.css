@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Saira+Condensed&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Staatliches&display=swap');
+
+:root {
+  --color-foreground: #0f0e17;
+  --color-background: #fffffe;
+  --color-links: #f25f4c;
+  --color-links-hover: #c46800;
+  --color-border: hsl(0, 0%, 82%);
+
+  --color-highlight: #ffe8ce; 
+  --color-secondary: #f25f4c; 
+  --color-tertiary: #e53170;
+  
+  --font-body: 'Lato', -apple-system, "Segoe UI", Helvetica Neue, Helvetica, Roboto,
+    Arial, sans-serif, system-ui, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+:-moz-focusring {
+  outline: auto;
+}
+
+:focus {
+  outline: var(--color-links) solid 2px;
+  outline-offset: 2px;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+}
+
+body {
+  font-family: var(--font-body);
+  line-height: 1.5;
+}
+
+a {
+  color: var(--color-links);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-links-hover);
+  text-decoration: underline;
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  background-color: var(--color-border);
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+input:where([type="text"]),
+input:where([type="search"]) {
+  display: block;
+  border: 1px solid var(--color-border);
+  width: 100%;
+  font: inherit;
+  line-height: 1;
+  height: calc(1ch + 1.5em);
+  padding-right: 0.5em;
+  padding-left: 0.5em;
+  background-color: hsl(0 0% 100% / 20%);
+  color: var(--color-foreground);
+}
+
+.app-logo{
+  font-family: 'Saira Condensed', sans-serif;
+  font-size: 25px;
+  color: var(--color-foreground); 
+  text-align: center;
+}
+
+.app-logo h1{
+  padding: 20px 40px; 
+  margin: 0; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-logo:hover{
+  text-decoration: none;
+  transition: all 0.3s ease-in;
+  color: var(--color-links); 
+}
+
+.app-logo:hover .lightning{
+  display: inline-block;
+  transition: all 0.3s ease-in;
+  transform: rotate(360deg);
+}
+
+.app-line{
+  height: 5px;
+  display: block;
+}
+
+.app-logo-lines{
+  height: 4px;
+  width: 100%;
+  background: var(--color-foreground);
+}
+
+.app-logo-text{
+  padding: 0 20px; 
+  flex-shrink: 0;
+}
+
+.footer{
+  text-align: right;
+  padding: 40px 20px 20px 0;
+  font-size: 12px; 
+  border-top: 2px solid var(--color-foreground);
+  margin: 0 40px;
+}
