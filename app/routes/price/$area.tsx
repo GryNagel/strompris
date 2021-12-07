@@ -17,9 +17,10 @@ import type { User } from '.prisma/client';
 
 type LoaderData = {
     today: PriceView;
-    tomorrow: PriceView;
+    tomorrow?: PriceView | null;
     areaName: string | undefined;
     user: User | null;
+    averagePrice: number;
 };
 
 function validateSurcharge(surcharge: string) {
@@ -46,9 +47,23 @@ export let loader: LoaderFunction = async ({ params, request }): Promise<LoaderD
         let todayRes = await getPricesForArea(params.area, today);
         let tomorrowRes = await getPricesForArea(params.area, tomorrow);
 
+        if (!todayRes) {
+            throw Error('Could not get data');
+        }
+
         return {
             today: todayRes,
-            tomorrow: tomorrowRes,
+            tomorrow: tomorrowRes || null,
+            averagePrice:
+                Math.round(
+                    (todayRes.prices.reduce((acc, currentItem) => {
+                        acc += currentItem.price;
+                        return acc;
+                    }, 0) /
+                        todayRes.prices.length +
+                        Number.EPSILON) *
+                        10000
+                ) / 10000,
             areaName: Areas.find((item) => item.number === params.area)?.title,
             user,
         };
@@ -109,7 +124,9 @@ export default function PriceRoute() {
             <div className="surcharge">
                 {data.user ? (
                     <Form method="post">
-                        <label htmlFor="surcharge-input">Påslag i ører</label>
+                        <label htmlFor="surcharge-input" className="surcharge-label">
+                            <h2>Påslag i ører: </h2>
+                        </label>
                         <input
                             id="surcharge-input"
                             name="surcharge"
@@ -139,6 +156,12 @@ export default function PriceRoute() {
                         </p>
                     </div>
                 )}
+                <div className="average">
+                    <h2>Dagens gjennomsnittspris for {data.areaName}:</h2>
+                    <p className="average-price">
+                        {data.averagePrice} <span className="average-suffix">NOK/kWh</span>
+                    </p>
+                </div>
             </div>
         </div>
     );

@@ -68,6 +68,7 @@
 
 .link-active.link-3 {
     background: var(--chart-highlight-3);
+
 }
 
 .link-active.link-4 {
@@ -84,6 +85,27 @@
 
 .surcharge{
     margin-bottom: 160px; 
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 100px; 
+}
+
+.surcharge-label{
+    text-align: center;
+}
+
+.average{
+    text-align: center;
+}
+
+.average-price{
+    font-size: 60px;
+    color: var(--color-secondary);
+    margin: 0; 
+}
+
+.average-suffix{
+    font-size: 20px; 
 }
 
 .price-chart{

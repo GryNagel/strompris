@@ -12,7 +12,7 @@ export default function Header() {
                     <span className="app-logo-lines"></span>
                 </h1>
             </Link>
-            <span className="app-line"></span>
+            <p className="slogan"> Planlegg ditt strømforbruk </p>
         </header>
     );
 }

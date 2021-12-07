@@ -1,6 +1,6 @@
 import type { LinksFunction, LoaderFunction } from 'remix';
 import { useLoaderData } from 'remix';
-import { Link, Outlet } from 'remix';
+import { Link } from 'remix';
 import { addHours, setMinutes } from 'date-fns';
 
 import { Areas } from '../_constants';

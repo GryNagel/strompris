@@ -73,6 +73,9 @@ export default function PriceChart({ today, tomorrow, areaName, surcharge }: Pri
                 fontFamily: '',
             },
         },
+        subtitle: {
+            text: tomorrow ? '' : 'Prisene for i morgen kommer mellom 12-13',
+        },
     };
 
     return <HighchartsReact highcharts={Highcharts} constructorType={'chart'} options={options} />;

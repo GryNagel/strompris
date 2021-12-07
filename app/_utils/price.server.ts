@@ -86,7 +86,7 @@ export async function getPriceDataForAllZones(date: string): Promise<any> {
     );
 }
 
-export async function getPricesForArea(area: string, date: string): Promise<any> {
+export async function getPricesForArea(area: string, date: string): Promise<PriceView | null> {
     try {
         let storedPrices = await findStoredPrices(area, date);
         if (!storedPrices) {

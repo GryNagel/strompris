@@ -1,6 +1,6 @@
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts from 'highcharts';
-import { format, isBefore, setMinutes } from 'date-fns';
+import { format, setMinutes } from 'date-fns';
 import { addHours } from 'date-fns';
 
 import type { PriceView } from '../_models';

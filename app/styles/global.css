@@ -101,7 +101,7 @@ input:where([type="search"]) {
 }
 
 .app-logo h1{
-  padding: 20px 40px; 
+ 
   margin: 0; 
   display: flex;
   justify-content: center;
@@ -125,6 +125,12 @@ input:where([type="search"]) {
   display: block;
 }
 
+.app-header{
+  text-align: center;
+  padding: 20px 40px; 
+  font-size: 24px; 
+}
+
 .app-logo-lines{
   height: 4px;
   width: 100%;
@@ -134,6 +140,10 @@ input:where([type="search"]) {
 .app-logo-text{
   padding: 0 20px; 
   flex-shrink: 0;
+}
+
+.slogan{
+  display: inline;
 }
 
 .footer{
