@@ -15,7 +15,9 @@
     text-align: center;
     border-radius: 8px;
     font-size: 28px;
-    padding: 10px 20px;
+    padding: 10px 30px;
+    border-top: 8px solid; 
+    border-bottom: 8px solid; 
 }
 
 .link:hover {
@@ -58,29 +60,32 @@
 
 .link-active.link-1 {
     background: var(--chart-highlight-1);
-    box-shadow: 0 0 0 4px var(--chart-1);
 }
 
 .link-active.link-2 {
     background: var(--chart-highlight-2);
-    box-shadow: 0 0 0 4px var(--chart-2);
 }
 
 .link-active.link-3 {
-    box-shadow: 0 0 0 4px var(--chart-3);
     background: var(--chart-highlight-3);
 }
 
 .link-active.link-4 {
-    box-shadow: 0 0 0 4px var(--chart-4);
     background: var(--chart-highlight-4);
 }
 
 .link-active.link-5 {
-    box-shadow: 0 0 0 4px var(--chart-5);
     background: var(--chart-highlight-5);
 }
 
 .link-active {
     transition: background 0.3s ease-in, box-shadow 0.3s ease-in;
+}
+
+.surcharge{
+    margin-bottom: 160px; 
+}
+
+.price-chart{
+    margin-bottom: 40px; 
 }

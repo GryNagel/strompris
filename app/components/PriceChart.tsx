@@ -11,14 +11,15 @@ type PriceChartProps = {
     today: Price[];
     tomorrow: Price[];
     areaName: string | undefined;
+    surcharge?: string | null;
 };
 
-function getSeries(today: Price[], tomorrow: Price[]) {
+function getSeries(today: Price[], tomorrow: Price[], surcharge?: string | null) {
     const todayOptions = {
         name: 'I dag',
         data: today
             .sort((a, b) => (isBefore(new Date(a.validFrom), new Date(b.validFrom)) ? -1 : 1))
-            .map((item) => item.price),
+            .map((item) => addSurcharge(item.price, surcharge)),
         color: '#ffa238',
     };
 
@@ -27,7 +28,7 @@ function getSeries(today: Price[], tomorrow: Price[]) {
             name: 'I morgen',
             data: tomorrow
                 .sort((a, b) => (isBefore(new Date(a.validFrom), new Date(b.validFrom)) ? -1 : 1))
-                .map((item) => item.price),
+                .map((item) => addSurcharge(item.price, surcharge)),
             color: '#3a91b6',
         };
         return [todayOptions, tomorrowOptions];
@@ -36,12 +37,19 @@ function getSeries(today: Price[], tomorrow: Price[]) {
     return [todayOptions];
 }
 
-export default function PriceChart({ today, tomorrow, areaName }: PriceChartProps) {
+function addSurcharge(price: number, surcharge?: string | null): number {
+    if (!surcharge) {
+        return price;
+    }
+    return price + parseInt(surcharge) / 1000;
+}
+
+export default function PriceChart({ today, tomorrow, areaName, surcharge }: PriceChartProps) {
     const options = {
         title: {
             text: `Strømpriser - ${areaName}`,
         },
-        series: [...getSeries(today, tomorrow)],
+        series: [...getSeries(today, tomorrow, surcharge)],
         xAxis: {
             name: 'NOK',
             categories: today.map((item) => createViewTime(item.validFrom)),

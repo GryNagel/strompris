@@ -1,0 +1,50 @@
+.container {
+    min-height: 100vh;
+}
+
+.container,
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.content {
+    padding: 1rem;
+    background-color: var(--color-foreground);
+    border-radius: 8px;
+    width: 400px;
+    max-width: 100%;
+    color: var(--color-background);
+}
+
+@media print, (min-width: 640px) {
+    .content {
+        padding: 2rem;
+        border-radius: 8px;
+    }
+}
+
+h1 {
+    margin-top: 0;
+}
+
+fieldset {
+    display: flex;
+    justify-content: center;
+}
+
+fieldset > :not(:last-child) {
+    margin-right: 2rem;
+}
+
+.links ul {
+    margin-top: 1rem;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+

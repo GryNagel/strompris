@@ -9,6 +9,7 @@ import { getPriceDataForAllZones } from '../_utils/price.server';
 import Footer from '../components/Footer';
 import AllPricesChart from '../components/AllPricesChart';
 import { createIsoDate, createViewTime } from '../_utils/date';
+import { getUser } from '../_utils/session.server';
 
 import indexStylesUrl from '~/styles/index.css';
 import type { Price } from '.prisma/client';
@@ -17,13 +18,18 @@ export let links: LinksFunction = () => {
     return [{ rel: 'stylesheet', href: indexStylesUrl }];
 };
 
-type LoaderData = { prices: { area: string; date: string; prices: Price[] }[] };
+type LoaderData = {
+    prices: { area: string; date: string; prices: Price[] }[];
+    userName: string | null;
+};
 
-export let loader: LoaderFunction = async (): Promise<LoaderData> => {
+export let loader: LoaderFunction = async ({ request }): Promise<LoaderData> => {
+    let user = await getUser(request);
+    let userName = user?.username ? user.username : null;
     const date = createIsoDate(new Date());
     let prices = await getPriceDataForAllZones(date);
 
-    return { prices };
+    return { prices, userName };
 };
 
 export default function IndexRoute() {
@@ -71,8 +77,7 @@ export default function IndexRoute() {
                     <AllPricesChart data={data.prices} />
                 </div>
             </div>
-            <Outlet />
-            <Footer />
+            <Footer userName={data.userName} />
         </div>
     );
 }
