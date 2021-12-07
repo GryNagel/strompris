@@ -125,7 +125,7 @@ export default function PriceRoute() {
                 {data.user ? (
                     <Form method="post">
                         <label htmlFor="surcharge-input" className="surcharge-label">
-                            <h2>Påslag i ører: </h2>
+                            <h2>Påslag i øre: </h2>
                         </label>
                         <input
                             id="surcharge-input"

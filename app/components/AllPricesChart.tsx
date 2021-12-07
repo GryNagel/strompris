@@ -5,7 +5,7 @@ import { addHours } from 'date-fns';
 
 import type { PriceView } from '../_models';
 import { Areas, viewTimeFormat } from '../_constants';
-import { createIsoDate } from '../_utils/date';
+import { createIsoDate, createViewTime } from '../_utils/date';
 
 type PriceChartProps = {
     data: PriceView[];
@@ -30,7 +30,7 @@ export default function AllPricesChart({ data }: PriceChartProps) {
         xAxis: {
             name: 'NOK',
             categories: [
-                `${timeNow} - 
+                `${createViewTime(new Date(timeNow))} - 
         ${timeInAnHour}`,
             ],
         },
