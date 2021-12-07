@@ -120,6 +120,10 @@ input:where([type="search"]) {
   transform: rotate(360deg);
 }
 
+.app-logo:focus, .app-logo:active{
+  outline: none;
+}
+
 .app-line{
   height: 5px;
   display: block;
