@@ -1,6 +1,5 @@
 import type { LinksFunction, LoaderFunction } from 'remix';
-import { useLoaderData } from 'remix';
-import { NavLink, Outlet } from 'remix';
+import { useLoaderData, NavLink, Outlet } from 'remix';
 
 import Header from '../components/Header';
 import { Areas } from '../_constants';

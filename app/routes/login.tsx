@@ -48,6 +48,7 @@ export const action: ActionFunction = async ({ request }): Promise<Response | Ac
     const username = form.get('username');
     const password = form.get('password');
     const redirectTo = form.get('redirectTo') || '/';
+
     if (
         typeof loginType !== 'string' ||
         typeof username !== 'string' ||
