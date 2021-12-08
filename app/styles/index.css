@@ -8,7 +8,7 @@
 }
 
 .navigation-item {
-    color: var(--color-background);
+    color: var(--color-card-text);
 }
 
 .price {
@@ -24,7 +24,7 @@
 
 .explanation {
     font-size: 16px;
-    color: var(--color-background);
+    color: var(--color-card-text);
 }
 
 .navigation-link {
