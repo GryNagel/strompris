@@ -26,6 +26,7 @@
   
   --font-body: 'Lato', -apple-system, "Segoe UI", Helvetica Neue, Helvetica, Roboto,
     Arial, sans-serif, system-ui, "Apple Color Emoji", "Segoe UI Emoji";
+  --color-error: hsla(356, 77%, 59%, 0.747);
 }
 
 html {
@@ -320,12 +321,23 @@ label > [type="radio"] {
   font-size: 0.8rem;
 }
 
+.error-wrapper{
+  text-align: center;
+}
+
 .error-container {
-  background-color: hsla(356, 77%, 59%, 0.747);
+  background-color: var(--color-error);
   border-radius: 0.25rem;
   padding: 0.5rem 1rem;
 }
 
+.error-link{
+  color: var(--color-foreground);
+}
+
+.error-link:hover{
+  color: var(--color-background);
+}
 
 .button {
   --shadow-color: hsl(var(--hs-links) 30%);

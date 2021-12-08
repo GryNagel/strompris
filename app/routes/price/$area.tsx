@@ -1,18 +1,14 @@
 import type { LoaderFunction, MetaFunction, ActionFunction } from 'remix';
-import { Form } from 'remix';
-import { useActionData } from 'remix';
-import { Link } from 'remix';
-import { useLoaderData } from 'remix';
-import { addDays } from 'date-fns';
+import { useCatch, Form, useActionData, Link, useLoaderData } from 'remix';
 
 import PriceChart from '../../components/PriceChart';
-import { getPricesForArea } from '../../_utils/price.server';
+import { calculateAveragePrice, getPricesForArea } from '../../_utils/price.server';
 import { Areas } from '../../_constants';
 import type { PriceView } from '../../_models';
-import { createIsoDate } from '../../_utils/date';
 import { getUser, getUserId } from '../../_utils/session.server';
-import { db } from '../../_utils/db.server';
+import { getApiDates } from '../../_utils/date.server';
 
+import { db } from '~/_utils/db.server';
 import type { User } from '.prisma/client';
 
 type LoaderData = {
@@ -37,38 +33,33 @@ export const meta: MetaFunction = ({ params }) => {
 };
 
 export let loader: LoaderFunction = async ({ params, request }): Promise<LoaderData | null> => {
-    const todaysDate = new Date();
-    const today = createIsoDate(todaysDate);
-    const tomorrow = createIsoDate(addDays(todaysDate, 1));
+    if (!params.area || Areas.find((item) => item.number === params.area) === undefined) {
+        throw new Response(`Område "${params.area}" eksisterer ikke`, {
+            status: 404,
+        });
+    }
+
+    const { today, tomorrow } = getApiDates();
+
     let userRes = await getUser(request);
     let user = userRes ? userRes : null;
 
-    if (params.area) {
-        let todayRes = await getPricesForArea(params.area, today);
-        let tomorrowRes = await getPricesForArea(params.area, tomorrow);
+    let todayRes = await getPricesForArea(params.area, today);
+    let tomorrowRes = await getPricesForArea(params.area, tomorrow);
 
-        if (!todayRes) {
-            throw Error('Could not get data');
-        }
-
-        return {
-            today: todayRes,
-            tomorrow: tomorrowRes || null,
-            averagePrice:
-                Math.round(
-                    (todayRes.prices.reduce((acc, currentItem) => {
-                        acc += currentItem.price;
-                        return acc;
-                    }, 0) /
-                        todayRes.prices.length +
-                        Number.EPSILON) *
-                        10000
-                ) / 10000,
-            areaName: Areas.find((item) => item.number === params.area)?.title,
-            user,
-        };
+    if (!todayRes) {
+        throw new Response('Ingen priser for i dag funnet 😢', {
+            status: 404,
+        });
     }
-    return null;
+
+    return {
+        today: todayRes,
+        tomorrow: tomorrowRes || null,
+        averagePrice: calculateAveragePrice(todayRes.prices),
+        areaName: Areas.find((item) => item.number === params.area)?.title,
+        user,
+    };
 };
 
 type ActionData = {
@@ -165,4 +156,13 @@ export default function PriceRoute() {
             </div>
         </div>
     );
+}
+
+export function CatchBoundary() {
+    const caught = useCatch();
+
+    if (caught.status === 404) {
+        return <div className="error-container">{caught.data}</div>;
+    }
+    throw new Error(`Her har det skjedd noe rart: ${caught.status}`);
 }

@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 
-import { apiDateFormat, Areas, viewTimeFormat } from '../_constants';
+import { apiDateFormat, Areas } from '../_constants';
 import type { PriceApi, PriceView } from '../_models';
 import { db } from './db.server';
 
@@ -97,4 +97,18 @@ export async function getPricesForArea(area: string, date: string): Promise<Pric
         await createNewPrices(area, date);
         return await findStoredPrices(area, date);
     }
+}
+
+export function calculateAveragePrice(prices: Price[]): number {
+    return (
+        Math.round(
+            (prices.reduce((acc, currentItem) => {
+                acc += currentItem.price;
+                return acc;
+            }, 0) /
+                prices.length +
+                Number.EPSILON) *
+                10000
+        ) / 10000
+    );
 }

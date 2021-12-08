@@ -10,12 +10,17 @@ import Footer from '../components/Footer';
 import AllPricesChart from '../components/AllPricesChart';
 import { createIsoDate, createViewTime } from '../_utils/date';
 import { getUser } from '../_utils/session.server';
+// import { BarChart } from '../components/BarChart';
 
 import indexStylesUrl from '~/styles/index.css';
+import barChartStylesUrl from '~/styles/barChart.css';
 import type { Price } from '.prisma/client';
 
 export let links: LinksFunction = () => {
-    return [{ rel: 'stylesheet', href: indexStylesUrl }];
+    return [
+        { rel: 'stylesheet', href: indexStylesUrl },
+        { rel: 'stylesheet', href: barChartStylesUrl },
+    ];
 };
 
 type LoaderData = {
@@ -42,7 +47,7 @@ export default function IndexRoute() {
             <div className="container">
                 <h2 className="price-header">
                     Strømprisen her og nå ({createViewTime(setMinutes(new Date(), 0))} -{' '}
-                    {createViewTime(addHours(setMinutes(new Date(), 0), 1))}):{' '}
+                    {createViewTime(addHours(setMinutes(new Date(), 0), 1))}):
                 </h2>
                 <ul role="navigation" className="navigation-list">
                     {data.prices.map((item) => (
@@ -75,6 +80,7 @@ export default function IndexRoute() {
                 </ul>
                 <div className="all-prices-chart">
                     <AllPricesChart data={data.prices} />
+                    {/* <BarChart data={data.prices} /> */}
                 </div>
             </div>
             <Footer userName={data.userName} />
