@@ -8,8 +8,7 @@
     "dev": "remix dev",
     "postinstall": "remix setup node",
     "start": "remix-serve build",
-    "lint": "eslint --fix --ext .ts,.tsx .",
-    "push-db": "npx prisma db push"
+    "lint": "eslint --fix --ext .ts,.tsx ."
   },
   "dependencies": {
     "@remix-run/react": "^1.0.6",
