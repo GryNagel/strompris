@@ -3,38 +3,29 @@ import { useLoaderData } from 'remix';
 import { Link } from 'remix';
 import { addHours, setMinutes } from 'date-fns';
 
-import { Areas } from '../_constants';
+import { areas } from '../_constants';
 import Header from '../components/Header';
 import { getPriceDataForAllZones } from '../_utils/price.server';
 import Footer from '../components/Footer';
 import AllPricesChart from '../components/AllPricesChart';
 import { createIsoDate, createViewTime } from '../_utils/date';
-import { getUser } from '../_utils/session.server';
-// import { BarChart } from '../components/BarChart';
 
 import indexStylesUrl from '~/styles/index.css';
-import barChartStylesUrl from '~/styles/barChart.css';
 import type { Price } from '.prisma/client';
 
 export let links: LinksFunction = () => {
-    return [
-        { rel: 'stylesheet', href: indexStylesUrl },
-        { rel: 'stylesheet', href: barChartStylesUrl },
-    ];
+    return [{ rel: 'stylesheet', href: indexStylesUrl }];
 };
 
 type LoaderData = {
     prices: { area: string; date: string; prices: Price[] }[];
-    userName: string | null;
 };
 
-export let loader: LoaderFunction = async ({ request }): Promise<LoaderData> => {
-    let user = await getUser(request);
-    let userName = user?.username ? user.username : null;
+export let loader: LoaderFunction = async (): Promise<LoaderData> => {
     const date = createIsoDate(new Date());
     let prices = await getPriceDataForAllZones(date);
 
-    return { prices, userName };
+    return { prices };
 };
 
 export default function IndexRoute() {
@@ -62,7 +53,7 @@ export default function IndexRoute() {
                         >
                             <li className="navigation-item">
                                 <h2 className="header">
-                                    {Areas.find((area) => area.number === item.area)?.title}
+                                    {areas.find((area) => area.number === item.area)?.title}
                                 </h2>
                                 <p className="price">
                                     {
@@ -80,10 +71,9 @@ export default function IndexRoute() {
                 </ul>
                 <div className="all-prices-chart">
                     <AllPricesChart data={data.prices} />
-                    {/* <BarChart data={data.prices} /> */}
                 </div>
             </div>
-            <Footer userName={data.userName} />
+            <Footer />
         </div>
     );
 }

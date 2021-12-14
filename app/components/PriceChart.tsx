@@ -5,30 +5,29 @@ import { addHours } from 'date-fns';
 
 import { createViewTime } from '../_utils/date';
 
-import type { Price } from '.prisma/client';
+import type { Price } from '~/_models';
 
 type PriceChartProps = {
     today: Price[];
-    tomorrow: Price[];
+    tomorrow: Price[] | null;
     areaName: string | undefined;
-    surcharge?: string | null;
 };
 
-function getSeries(today: Price[], tomorrow: Price[], surcharge?: string | null) {
+function getSeries(today: Price[], tomorrow: Price[] | null) {
     const todayOptions = {
         name: 'I dag',
         data: today
             .sort((a, b) => (isBefore(new Date(a.validFrom), new Date(b.validFrom)) ? -1 : 1))
-            .map((item) => addSurcharge(item.price, surcharge)),
+            .map((item) => item.price),
         color: '#ffa238',
     };
 
-    if (tomorrow.length !== 0) {
+    if (tomorrow && tomorrow.length !== 0) {
         const tomorrowOptions = {
             name: 'I morgen',
             data: tomorrow
                 .sort((a, b) => (isBefore(new Date(a.validFrom), new Date(b.validFrom)) ? -1 : 1))
-                .map((item) => addSurcharge(item.price, surcharge)),
+                .map((item) => item.price),
             color: '#3a91b6',
         };
         return [todayOptions, tomorrowOptions];
@@ -37,19 +36,12 @@ function getSeries(today: Price[], tomorrow: Price[], surcharge?: string | null)
     return [todayOptions];
 }
 
-function addSurcharge(price: number, surcharge?: string | null): number {
-    if (!surcharge) {
-        return price;
-    }
-    return price + parseInt(surcharge) / 1000;
-}
-
-export default function PriceChart({ today, tomorrow, areaName, surcharge }: PriceChartProps) {
+export default function PriceChart({ today, tomorrow, areaName }: PriceChartProps) {
     const options = {
         title: {
             text: `Strømpriser - ${areaName}`,
         },
-        series: [...getSeries(today, tomorrow, surcharge)],
+        series: [...getSeries(today, tomorrow)],
         xAxis: {
             name: 'NOK',
             categories: today.map((item) => createViewTime(item.validFrom)),

@@ -1,14 +1,9 @@
 import { format } from 'date-fns';
 
-import { apiDateFormat, Areas } from '../_constants';
-import type { PriceApi, PriceView } from '../_models';
-import { db } from './db.server';
+import { apiDateFormat, areas } from '../_constants';
+import type { Price, PriceApi } from '../_models';
 
-import type { Price } from '.prisma/client';
-
-type NewPrice = Pick<Price, 'price' | 'validTo' | 'validFrom'>;
-
-function calculatePrices(prices: PriceApi | null): NewPrice[] {
+function calculatePrices(prices: PriceApi | null): Price[] {
     if (!prices) {
         return [];
     }
@@ -20,8 +15,9 @@ function calculatePrices(prices: PriceApi | null): NewPrice[] {
     }));
 }
 
-async function fetchDate(date: string, area: string): Promise<PriceApi | null> {
+async function fetchPricesByDateAndArea(date: string, area: string): Promise<PriceApi | null> {
     const dateToFetch = format(new Date(date), apiDateFormat);
+
     try {
         let res = await fetch(`https://norway-power.ffail.win/?zone=NO${area}&date=${dateToFetch}`);
 
@@ -31,72 +27,27 @@ async function fetchDate(date: string, area: string): Promise<PriceApi | null> {
     }
 }
 
-async function getPriceDataByArea(area: string, date: string): Promise<NewPrice[]> {
-    let res = await fetchDate(date, area);
-
-    return calculatePrices(res);
-}
-
-async function findStoredPrices(number: string, date: string): Promise<PriceView | null> {
-    const item = await db.prices.findFirst({
-        where: { area: number, date: date },
-        select: { area: true, date: true, prices: true },
-    });
-
-    if (!item) {
+export async function getPriceDataByArea(area: string, date: string): Promise<Price[] | null> {
+    try {
+        let res = await fetchPricesByDateAndArea(date, area);
+        return calculatePrices(res);
+    } catch {
         return null;
     }
-    return item;
-}
-
-async function createNewPrices(number: string, date: string) {
-    const res = await getPriceDataByArea(number, date);
-    await db.prices.create({
-        data: { area: number, date: date },
-    });
-
-    const priceObject = await db.prices.findFirst({
-        where: { area: number, date: date },
-    });
-
-    await Promise.all(
-        res.map(
-            async (item) =>
-                await db.price.create({
-                    data: { ...item, pricesId: priceObject?.id },
-                })
-        )
-    );
 }
 
 export async function getPriceDataForAllZones(date: string): Promise<any> {
-    return await Promise.all(
-        Areas.map(async ({ number }) => {
+    const prices = await Promise.all(
+        areas.map(async ({ number }) => {
             try {
-                let storedPrices = await findStoredPrices(number, date);
-                if (!storedPrices) {
-                    throw new Error('need to fetch them');
-                }
-                return storedPrices;
+                let res = await fetchPricesByDateAndArea(date, number);
+                return { area: number, date: date, prices: calculatePrices(res) };
             } catch {
-                await createNewPrices(number, date);
-                return await findStoredPrices(number, date);
+                return null;
             }
         })
     );
-}
-
-export async function getPricesForArea(area: string, date: string): Promise<PriceView | null> {
-    try {
-        let storedPrices = await findStoredPrices(area, date);
-        if (!storedPrices) {
-            throw new Error('no prices');
-        }
-        return storedPrices;
-    } catch {
-        await createNewPrices(area, date);
-        return await findStoredPrices(area, date);
-    }
+    return prices;
 }
 
 export function calculateAveragePrice(prices: Price[]): number {

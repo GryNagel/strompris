@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 
-import { Areas } from '../_constants';
+import { areas } from '../_constants';
 import type { PriceView } from '../_models';
 import { createIsoDate } from '../_utils/date';
 
@@ -12,7 +12,7 @@ export function BarChart({ data }: PriceChartProps): ReactElement {
     let timeNow = createIsoDate(new Date());
 
     let series = data.map((areaPrice) => ({
-        areaName: Areas.find((item) => item.number === areaPrice.area)?.title || areaPrice.area,
+        areaName: areas.find((item) => item.number === areaPrice.area)?.title || areaPrice.area,
         price: areaPrice.prices
             .filter((item) => item.validFrom === timeNow)
             .map((item) => item.price)[0],

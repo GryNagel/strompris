@@ -1,39 +1,28 @@
-import type { LoaderFunction, MetaFunction, ActionFunction } from 'remix';
-import { useCatch, Form, useActionData, Link, useLoaderData } from 'remix';
+import type { LoaderFunction, MetaFunction } from 'remix';
+import { useCatch, useLoaderData } from 'remix';
 
 import PriceChart from '../../components/PriceChart';
-import { calculateAveragePrice, getPricesForArea } from '../../_utils/price.server';
-import { Areas } from '../../_constants';
-import type { PriceView } from '../../_models';
-import { getUser, getUserId } from '../../_utils/session.server';
+import { calculateAveragePrice, getPriceDataByArea } from '../../_utils/price.server';
+import { areas } from '../../_constants';
+import type { Price } from '../../_models';
 import { getApiDates } from '../../_utils/date.server';
 
-import { db } from '~/_utils/db.server';
-import type { User } from '.prisma/client';
-
 type LoaderData = {
-    today: PriceView;
-    tomorrow?: PriceView | null;
+    today: Price[] | null;
+    tomorrow?: Price[] | null;
     areaName: string | undefined;
-    user: User | null;
-    averagePrice: number;
+    averagePriceToday: number;
+    averagePriceTomorrow: number | null;
 };
-
-function validateSurcharge(surcharge: string) {
-    let parsedSurcharge = parseInt(surcharge);
-    if (isNaN(parsedSurcharge)) {
-        return `Påslag må være et tall`;
-    }
-}
 
 export const meta: MetaFunction = ({ params }) => {
     return {
-        title: `Strømpriser - ${Areas.find((item) => item.number === params.area)?.title}`,
+        title: `Strømpriser - ${areas.find((item) => item.number === params.area)?.title}`,
     };
 };
 
-export let loader: LoaderFunction = async ({ params, request }): Promise<LoaderData | null> => {
-    if (!params.area || Areas.find((item) => item.number === params.area) === undefined) {
+export let loader: LoaderFunction = async ({ params }): Promise<LoaderData | null> => {
+    if (!params.area || areas.find((item) => item.number === params.area) === undefined) {
         throw new Response(`Område "${params.area}" eksisterer ikke`, {
             status: 404,
         });
@@ -41,11 +30,8 @@ export let loader: LoaderFunction = async ({ params, request }): Promise<LoaderD
 
     const { today, tomorrow } = getApiDates();
 
-    let userRes = await getUser(request);
-    let user = userRes ? userRes : null;
-
-    let todayRes = await getPricesForArea(params.area, today);
-    let tomorrowRes = await getPricesForArea(params.area, tomorrow);
+    let todayRes = await getPriceDataByArea(params.area, today);
+    let tomorrowRes = await getPriceDataByArea(params.area, tomorrow);
 
     if (!todayRes) {
         throw new Response('Ingen priser for i dag funnet 😢', {
@@ -54,105 +40,45 @@ export let loader: LoaderFunction = async ({ params, request }): Promise<LoaderD
     }
 
     return {
-        today: todayRes,
+        today: todayRes || null,
         tomorrow: tomorrowRes || null,
-        averagePrice: calculateAveragePrice(todayRes.prices),
-        areaName: Areas.find((item) => item.number === params.area)?.title,
-        user,
+        averagePriceToday: calculateAveragePrice(todayRes),
+        averagePriceTomorrow: tomorrowRes ? calculateAveragePrice(tomorrowRes) : null,
+        areaName: areas.find((item) => item.number === params.area)?.title,
     };
-};
-
-type ActionData = {
-    formError?: string;
-    fieldErrors?: {
-        surcharge: string | undefined;
-    };
-    fields?: {
-        surcharge: string | null;
-    };
-};
-
-export let action: ActionFunction = async ({ request }): Promise<Response | ActionData> => {
-    let userId = await getUserId(request);
-
-    if (!userId) {
-        return { formError: 'Du må være logget inn' };
-    }
-
-    let form = await request.formData();
-    let surcharge = form.get('surcharge');
-
-    if (typeof surcharge !== 'string') {
-        return { formError: `Skjema ikke sendt inn riktig` };
-    }
-
-    const fields = { surcharge };
-    const fieldErrors = {
-        surcharge: validateSurcharge(surcharge),
-    };
-
-    if (Object.values(fieldErrors).some(Boolean)) return { fieldErrors, fields };
-    else {
-        let user = await db.user.update({ where: { id: userId }, data: { surcharge } });
-        return { fields: { surcharge: user.surcharge } };
-    }
 };
 
 export default function PriceRoute() {
     let data = useLoaderData<LoaderData>();
-    const actionData = useActionData<ActionData>();
 
     return (
         <div>
             <div className="price-chart">
-                <PriceChart
-                    today={data.today.prices}
-                    tomorrow={data.tomorrow?.prices || []}
-                    areaName={data.areaName}
-                    surcharge={data.user?.surcharge}
-                />
+                {data.today && (
+                    <PriceChart
+                        today={data.today}
+                        tomorrow={data.tomorrow || []}
+                        areaName={data.areaName}
+                    />
+                )}
             </div>
             <div className="surcharge">
-                {data.user ? (
-                    <Form method="post">
-                        <label htmlFor="surcharge-input" className="surcharge-label">
-                            <h2>Påslag i øre: </h2>
-                        </label>
-                        <input
-                            id="surcharge-input"
-                            name="surcharge"
-                            type="tel"
-                            defaultValue={
-                                actionData?.fields?.surcharge || data?.user?.surcharge || ''
-                            }
-                            aria-invalid={Boolean(actionData?.fieldErrors?.surcharge) || undefined}
-                            aria-describedby={
-                                actionData?.fieldErrors?.surcharge ? 'surcharge-error' : undefined
-                            }
-                        />
-                        {actionData?.fieldErrors?.surcharge ? (
-                            <p className="form-validation-error" role="alert" id="password-error">
-                                {actionData?.fieldErrors.surcharge}
-                            </p>
-                        ) : null}
-                        <button type="submit" className="button">
-                            Legg på påslag
-                        </button>
-                    </Form>
-                ) : (
-                    <div>
-                        <p>
-                            <Link to="/login">Logg inn eller lag bruker</Link> for å kunne sette
-                            dine egne påslag på prisen.
-                        </p>
-                    </div>
-                )}
                 <div className="average">
                     <h2>Dagens gjennomsnittspris for {data.areaName}:</h2>
                     <p className="average-price">
-                        {data.averagePrice} <span className="average-suffix">NOK/kWh</span>
+                        {data.averagePriceToday} <span className="average-suffix">NOK/kWh</span>
                     </p>
                 </div>
+                {data.averagePriceTomorrow && (
+                    <div className="average">
+                        <h2>Morgendagens gjennomsnittspris for {data.areaName}:</h2>
+                        <p className="average-price">
+                            {data.averagePriceTomorrow}
+                            <span className="average-suffix">NOK/kWh</span>
+                            {data.averagePriceToday > data.averagePriceTomorrow ? '▼' : '▲'}
+                        </p>
+                    </div>
+                )}
             </div>
         </div>
     );

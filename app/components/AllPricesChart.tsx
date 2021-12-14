@@ -4,7 +4,7 @@ import { format, setMinutes } from 'date-fns';
 import { addHours } from 'date-fns';
 
 import type { PriceView } from '../_models';
-import { Areas, viewTimeFormat } from '../_constants';
+import { areas, viewTimeFormat } from '../_constants';
 import { createIsoDate, createViewTime } from '../_utils/date';
 
 type PriceChartProps = {
@@ -20,7 +20,7 @@ export default function AllPricesChart({ data }: PriceChartProps) {
             text: 'Strømpriser',
         },
         series: data.map((areaPrice) => ({
-            name: Areas.find((item) => item.number === areaPrice.area)?.title,
+            name: areas.find((item) => item.number === areaPrice.area)?.title,
             data: areaPrice.prices
                 .filter((item) => item.validFrom === timeNow)
                 .map((item) => item.price),

@@ -415,8 +415,3 @@ label > [type="radio"] {
   text-decoration: underline;
   cursor: pointer;
 }
-
-.user-info {
-  display: flex;
-  justify-content: flex-end;
-}

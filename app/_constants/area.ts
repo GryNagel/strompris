@@ -1,4 +1,4 @@
-export const Areas: { number: string; title: string }[] = [
+export const areas: { number: string; title: string }[] = [
     {
         number: '4',
         title: 'Nord',
