@@ -3,5 +3,11 @@ node_modules
 /.cache
 /build
 /public/build
+.cache
+.vercel
+.output
 
 .env
+
+public/build
+api/build
