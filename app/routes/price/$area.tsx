@@ -1,10 +1,10 @@
 import type { LoaderFunction, MetaFunction } from 'remix';
 import { useCatch, useLoaderData } from 'remix';
+import type { Price } from '@prisma/client';
 
 import PriceChart from '../../components/PriceChart';
-import { calculateAveragePrice, getPriceDataByArea } from '../../_utils/price.server';
+import { calculateAveragePrice, getPricesForArea } from '../../_utils/price.server';
 import { areas } from '../../_constants';
-import type { Price } from '../../_models';
 import { getApiDates } from '../../_utils/date.server';
 
 type LoaderData = {
@@ -30,20 +30,21 @@ export let loader: LoaderFunction = async ({ params }): Promise<LoaderData | nul
 
     const { today, tomorrow } = getApiDates();
 
-    let todayRes = await getPriceDataByArea(params.area, today);
-    let tomorrowRes = await getPriceDataByArea(params.area, tomorrow);
+    let todayRes = await getPricesForArea(params.area, today);
+    const isTomorrow = true;
+    let tomorrowRes = await getPricesForArea(params.area, tomorrow, isTomorrow);
 
-    if (!todayRes) {
+    if (!todayRes?.prices) {
         throw new Response('Ingen priser for i dag funnet 😢', {
             status: 404,
         });
     }
 
     return {
-        today: todayRes || null,
-        tomorrow: tomorrowRes || null,
-        averagePriceToday: calculateAveragePrice(todayRes),
-        averagePriceTomorrow: tomorrowRes ? calculateAveragePrice(tomorrowRes) : null,
+        today: todayRes.prices || null,
+        tomorrow: tomorrowRes?.prices || null,
+        averagePriceToday: calculateAveragePrice(todayRes?.prices),
+        averagePriceTomorrow: tomorrowRes ? calculateAveragePrice(tomorrowRes.prices) : null,
         areaName: areas.find((item) => item.number === params.area)?.title,
     };
 };

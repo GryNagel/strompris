@@ -8,6 +8,7 @@ node_modules
 .output
 
 .env
+/prisma/dev.db
 
 public/build
 api/build

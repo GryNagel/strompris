@@ -1,15 +1,25 @@
 import { Link, Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useCatch } from 'remix';
 import type { LinksFunction } from 'remix';
 
+import defaultStylesUrl from '~/styles/default.css';
 import globalStylesUrl from '~/styles/global.css';
-import darkStylesUrl from '~/styles/dark.css';
+import globalLargeStylesUrl from '~/styles/global-large.css';
+import variables from '~/styles/variables.css';
+import darkVariables from '~/styles/variables-dark.css';
 
 export let links: LinksFunction = () => {
     return [
+        { rel: 'stylesheet', href: defaultStylesUrl },
         { rel: 'stylesheet', href: globalStylesUrl },
+        { rel: 'stylesheet', href: variables },
         {
             rel: 'stylesheet',
-            href: darkStylesUrl,
+            href: globalLargeStylesUrl,
+            media: 'screen and (min-width: 1024px)',
+        },
+        {
+            rel: 'stylesheet',
+            href: darkVariables,
             media: '(prefers-color-scheme: dark)',
         },
     ];
