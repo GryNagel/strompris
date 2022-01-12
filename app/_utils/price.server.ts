@@ -25,7 +25,7 @@ async function fetchDate(date: string, area: string): Promise<PriceApi | null> {
 
     try {
         let res = await fetch(
-            `https://norway-power.ffail.win/?zone=NO${area}&date=${dateToFetch}&key=abcd`
+            `https://norway-power.ffail.win/?zone=NO${area}&date=${dateToFetch}&key=${process.env.API_KEY}`
         );
 
         return (await res.json()) as PriceApi;
@@ -113,11 +113,11 @@ export async function getPricesForArea(
     isTomorrow?: boolean
 ): Promise<PriceView | null> {
     const today = new Date();
-    const updateDateTime = set(today, { hours: 15, minutes: 0 });
+    const updateDateTime = set(today, { hours: 13, minutes: 0 });
     const checkForTomorrow = isAfter(today, updateDateTime);
 
-    if (!checkForTomorrow) {
-        throw new Error('No prices for tomorrow');
+    if (isTomorrow && !checkForTomorrow) {
+        return null;
     }
 
     try {
