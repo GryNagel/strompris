@@ -1,53 +1,16 @@
-# Welcome to Remix!
+# Strompris
 
-- [Remix Docs](https://remix.run/docs)
+Url: [http://strompris.vercel.app/](http://strompris.vercel.app/)
 
-## Development
+Application that shows the market price of power today (and tomorrow after 13.00) split into the five Norwegian power zones.
 
-From your terminal:
+Uses data from [https://norway-power.ffail.win](https://norway-power.ffail.win).
 
-```sh
-npm run dev
-```
+The application is built with [Remix](https://remix.run/).
 
-This starts your app in development mode, rebuilding assets on file changes.
+# How to run locally
 
-## Deployment
-
-First, build your app for production:
-
-```sh
-npm run build
-```
-
-Then run the app in production mode:
-
-```sh
-npm start
-```
-
-Now you'll need to pick a host to deploy it to.
-
-### DIY
-
-If you're familiar with deploying node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `remix build`
-
-- `build/`
-- `public/build/`
-
-### Using a Template
-
-When you ran `npx create-remix@latest` there were a few choices for hosting. You can run that again to create a new project, then copy over your `app/` folder to the new project that's pre-configured for your target server.
-
-```sh
-cd ..
-# create a new project, and pick a pre-configured host
-npx create-remix@latest
-cd my-new-remix-app
-# remove the new project's app (not the old one!)
-rm -rf app
-# copy your app over
-cp -R ../my-old-remix-app/app app
-```
+1. You need an api key for [https://norway-power.ffail.win](https://norway-power.ffail.win)
+2. You need a postgres db
+3. Add api key and postgres db URl in a .env file (DATABASE_URL="db url here" and API_KEY="api key here")
+4. Run `npm i` and `npm run dev`
