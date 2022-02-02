@@ -1,4 +1,4 @@
-# Strompris
+# ⚡ Strompris ⚡
 
 Url: [http://strompris.vercel.app/](http://strompris.vercel.app/)
 
