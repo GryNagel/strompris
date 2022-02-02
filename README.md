@@ -1,6 +1,6 @@
 # ⚡ Strompris ⚡
 
-Url: [http://strompris.vercel.app/](http://strompris.vercel.app/)
+Url: [https://strompris.vercel.app/](https://strompris.vercel.app/)
 
 Application that shows the market price of power today (and tomorrow after 13.00) split into the five Norwegian power zones.
 
