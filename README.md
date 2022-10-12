@@ -8,7 +8,7 @@ Uses data from [https://norway-power.ffail.win](https://norway-power.ffail.win).
 
 The application is built with [Remix](https://remix.run/).
 
-# How to run locally
+# How to run locally!
 
 1. You need an api key for [https://norway-power.ffail.win](https://norway-power.ffail.win)
 2. You need a postgres db
