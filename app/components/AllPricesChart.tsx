@@ -3,12 +3,13 @@ import Highcharts from 'highcharts';
 import { format, setMinutes } from 'date-fns';
 import { addHours } from 'date-fns';
 
-import type { PriceView } from '../_models';
 import { areas, viewTimeFormat } from '../_constants';
 import { createIsoDate, createViewTime } from '../_utils/date';
 
+import type { CurrentPrice } from '~/_models';
+
 type PriceChartProps = {
-    data: PriceView[];
+    data: CurrentPrice;
 };
 
 export default function AllPricesChart({ data }: PriceChartProps) {
@@ -19,18 +20,15 @@ export default function AllPricesChart({ data }: PriceChartProps) {
         title: {
             text: 'Strømpriser',
         },
-        series: data.map((areaPrice) => ({
-            name: areas.find((item) => item.number === areaPrice.area)?.title,
-            data: areaPrice.prices
-                .filter((item) => item.validFrom === timeNow)
-                .map((item) => item.price),
-            color: `var(--chart-${areaPrice.area}`,
+        series: Object.entries(data).map(([key, value]) => ({
+            name: areas[key].title,
+            data: [value],
+            color: `var(--chart-${areas[key].number})`,
         })),
-
         xAxis: {
             name: 'NOK',
             categories: [
-                `${createViewTime(new Date(timeNow))} - 
+                `${createViewTime(new Date(timeNow))} -
         ${timeInAnHour}`,
             ],
         },
@@ -45,6 +43,10 @@ export default function AllPricesChart({ data }: PriceChartProps) {
             style: {
                 fontFamily: '',
             },
+        },
+        accessibility: { enabled: false },
+        credits: {
+            enabled: false,
         },
     };
 

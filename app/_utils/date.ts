@@ -2,6 +2,8 @@ import { format, formatISO, set } from 'date-fns';
 
 import { apiDateFormat, viewDateFormat, viewDateTimeFormat, viewTimeFormat } from '../_constants';
 
+const today = new Date();
+
 export function createApiDate(date: string | Date): string {
     return format(new Date(date), apiDateFormat);
 }
@@ -23,4 +25,8 @@ export function createViewTime(date: string | Date): string {
 
 export function createIsoDate(date: string | Date): string {
     return formatISO(set(new Date(date), { minutes: 0, seconds: 0 }));
+}
+
+export function getHours(): string {
+    return format(today, 'HH');
 }
