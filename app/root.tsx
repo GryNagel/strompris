@@ -1,5 +1,14 @@
-import { Link, Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration, useCatch } from 'remix';
-import type { LinksFunction } from 'remix';
+import {
+    Link,
+    Links,
+    LiveReload,
+    Meta,
+    Outlet,
+    Scripts,
+    ScrollRestoration,
+    useCatch,
+} from '@remix-run/react';
+import type { LinksFunction } from '@remix-run/react/dist/routeModules';
 
 import defaultStylesUrl from '~/styles/default.css';
 import globalStylesUrl from '~/styles/global.css';

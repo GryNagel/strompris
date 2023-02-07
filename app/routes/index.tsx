@@ -1,12 +1,6 @@
-import type {
-    HandleDocumentRequestFunction,
-    HeadersFunction,
-    LinksFunction,
-    LoaderFunction,
-} from 'remix';
-import { useLoaderData } from 'remix';
-import { Link } from 'remix';
+import { Link, useLoaderData } from '@remix-run/react';
 import { addHours, setMinutes } from 'date-fns';
+import type { LinksFunction } from '@remix-run/react/dist/routeModules';
 
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -14,14 +8,14 @@ import { createViewTime, getHours } from '../_utils/date';
 
 import indexStylesUrl from '~/styles/index.css';
 import type { PriceByHour, Prices } from '~/_models';
-import fetchPrices from '~/_utils/api.server';
+import fetchPrices, { getTodaysPrices } from '~/_utils/api.server';
 import { areas } from '~/_constants';
 
 export const links: LinksFunction = () => {
     return [{ rel: 'stylesheet', href: indexStylesUrl }];
 };
 
-export const headers: HeadersFunction = (request) => {
+export const headers = () => {
     return {
         'cache-control': 'max-age=10',
     };
@@ -39,9 +33,9 @@ function getAveragePrice(prices: number[]): number {
     return Math.round(average);
 }
 
-export const loader: LoaderFunction = async (): Promise<LoaderData> => {
+export const loader = async (): Promise<LoaderData> => {
     console.log('hey');
-    const prices = await fetchPrices();
+    const prices = await getTodaysPrices();
     const averagePrices = Object.entries(prices.priceByHour.pricesObj).reduce(
         (acc, [key, value]) => {
             acc[key] = getAveragePrice(value);

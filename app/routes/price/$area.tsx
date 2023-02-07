@@ -1,5 +1,5 @@
-import type { MetaFunction } from 'remix';
-import { useCatch, useLoaderData } from 'remix';
+import type { type MetaFunction } from "@remix-run/node";
+import { useCatch, useLoaderData } from "@remix-run/react";
 
 import { areas } from '../../_constants';
 

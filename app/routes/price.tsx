@@ -1,5 +1,5 @@
-import type { LinksFunction } from 'remix';
-import { NavLink, Outlet } from 'remix';
+import type { type LinksFunction } from "@remix-run/node";
+import { NavLink, Outlet } from "@remix-run/react";
 
 import Header from '../components/Header';
 import { areas } from '../_constants';
@@ -17,7 +17,7 @@ export default function PriceRoute() {
             <Header />
             <div className="container">
                 <div className="link-container">
-                    {areas.map((item) => (
+                    {Object.keys(areas).map((item) => (
                         <NavLink
                             key={item.number}
                             to={item.number}
