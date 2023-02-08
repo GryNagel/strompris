@@ -1,91 +1,93 @@
 import { Link, useLoaderData } from '@remix-run/react';
-import { addHours, setMinutes } from 'date-fns';
+import { addHours, isBefore, set, setMinutes } from 'date-fns';
 import type { LinksFunction } from '@remix-run/react/dist/routeModules';
+import type { HeadersFunction, LoaderFunction } from '@remix-run/node';
 
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { createViewTime, getHours } from '../_utils/date';
 
 import indexStylesUrl from '~/styles/index.css';
-import type { PriceByHour, Prices } from '~/_models';
-import fetchPrices, { getTodaysPrices } from '~/_utils/api.server';
+import type { AveragePrices } from '~/_models';
+import { getTodaysPrices } from '~/_utils/api.server';
 import { areas } from '~/_constants';
+import { getAveragePrice } from '~/_utils/average.server';
+import { getEntries, getKeys } from '~/_utils/object';
 
 export const links: LinksFunction = () => {
-    return [{ rel: 'stylesheet', href: indexStylesUrl }];
+  return [{ rel: 'stylesheet', href: indexStylesUrl }];
 };
 
-export const headers = () => {
-    return {
-        'cache-control': 'max-age=10',
-    };
+function getCacheExpiry() {
+  const now = new Date();
+  const noon = set(now, { hours: 11, minutes: 59 });
+  const midnight = set(now, { hours: 23, minutes: 59 });
+  if (isBefore(now, noon)) {
+    return noon;
+  }
+  return midnight;
+}
+
+export const headers: HeadersFunction = () => {
+  return {
+    'cache-control': 'public',
+    Expires: getCacheExpiry().toISOString(),
+  };
 };
 
 type LoaderData = {
-    prices: Prices;
-    averagePrices: PriceByHour;
+  prices: Awaited<ReturnType<typeof getTodaysPrices>>;
+  averagePrices: AveragePrices;
 };
 
-function getAveragePrice(prices: number[]): number {
-    const total = prices.reduce((acc, currentItem) => (acc += currentItem), 0);
-    const average = total / prices.length;
-    console.log(prices, total, average, prices.length);
-    return Math.round(average);
-}
+export const loader: LoaderFunction = async () => {
+  const prices = await getTodaysPrices();
 
-export const loader = async (): Promise<LoaderData> => {
-    console.log('hey');
-    const prices = await getTodaysPrices();
-    const averagePrices = Object.entries(prices.priceByHour.pricesObj).reduce(
-        (acc, [key, value]) => {
-            acc[key] = getAveragePrice(value);
-            return acc;
-        },
-        {} as PriceByHour
-    );
+  const averagePrices = getEntries(prices.priceByHour.pricesObj).reduce((acc, [key, value]) => {
+    acc[key] = getAveragePrice(value);
+    return acc;
+  }, {} as AveragePrices);
 
-    return { prices, averagePrices };
+  return { prices, averagePrices };
 };
 
 export default function IndexRoute() {
-    const { prices, averagePrices } = useLoaderData<LoaderData>();
+  const { prices, averagePrices } = useLoaderData() as LoaderData;
 
-    console.log(prices.price);
-
-    return (
-        <div>
-            <Header />
-            <div className="container">
-                <h2 className="price-header">
-                    Strømprisen her og nå ({createViewTime(setMinutes(new Date(), 0))} -{' '}
-                    {createViewTime(addHours(setMinutes(new Date(), 0), 1))}):
-                </h2>
-                <nav>
-                    <ul className="navigation-list">
-                        {Object.entries(prices.price).map(([area, price]) => (
-                            <Link
-                                to={`/price/${areas[area].number}`}
-                                key={area}
-                                className={`navigation-link link-${areas[area].number}`}
-                                style={{
-                                    borderBottom: `20px solid var(--chart-${areas[area].number})`,
-                                    borderTop: `20px solid var(--chart-${areas[area].number})`,
-                                }}
-                            >
-                                <li className="navigation-item">
-                                    <h2 className="header">{areas[area].title}</h2>
-                                    <p className="price">
-                                        {prices.priceByHour.pricesObj[area][getHours()]}
-                                    </p>
-                                    <p>Gjennomsnitt: {averagePrices[area]}</p>
-                                    <p className="explanation">Øre/kWh</p>
-                                </li>
-                            </Link>
-                        ))}
-                    </ul>
-                </nav>
-            </div>
-            <Footer />
-        </div>
-    );
+  return (
+    <div>
+      <Header />
+      <div className="container">
+        <h2 className="price-header">
+          Strømprisen her og nå i øre/kWh ({createViewTime(setMinutes(new Date(), 0))} -{' '}
+          {createViewTime(addHours(setMinutes(new Date(), 0), 1))}):
+        </h2>
+        <nav>
+          <ul className="navigation-list">
+            {getKeys(prices.price).map((key) => (
+              <Link
+                to={`/price/${areas[key].number}`}
+                key={key}
+                className={`navigation-link link-${areas[key].number}`}
+                style={{
+                  borderBottom: `20px solid var(--chart-${areas[key].number})`,
+                  borderTop: `20px solid var(--chart-${areas[key].number})`,
+                }}
+              >
+                <li className="navigation-item">
+                  <h2 className="header">{areas[key].title}</h2>
+                  <p className="price">{prices.priceByHour.pricesObj[key][getHours()]}</p>
+                  <p>
+                    Dagens gjennomsnitt: <br />
+                    <strong>{averagePrices[key]}</strong>
+                  </p>
+                </li>
+              </Link>
+            ))}
+          </ul>
+        </nav>
+      </div>
+      <Footer />
+    </div>
+  );
 }

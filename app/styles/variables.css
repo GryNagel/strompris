@@ -1,29 +1,29 @@
 :root {
-    --color-text: #0f0e17;
-    --color-card-text: #0f0e17;
-    --color-foreground: hsl(0, 0%, 92%);
-    --color-background: #fffffe;
-    --color-links: #f25f4c;
-    --color-links-hover: #c46800;
-    --color-border: hsl(0, 0%, 82%);
+  --color-text: #0f0e17;
+  --color-card-text: #0f0e17;
+  --color-foreground: hsl(0, 0%, 92%);
+  --color-background: #fffffe;
+  --color-links: #f25f4c;
+  --color-links-hover: #c46800;
+  --color-border: hsl(0, 0%, 82%);
 
-    --color-highlight: #ffe8ce;
-    --color-secondary: #f25f4c;
-    --color-tertiary: #e53170;
+  --color-highlight: #ffe8ce;
+  --color-secondary: #f25f4c;
+  --color-tertiary: #e53170;
 
-    --chart-1: hsla(30, 72%, 48%, 1);
-    --chart-2: hsla(153, 23%, 46%, 1);
-    --chart-3: hsla(349, 98%, 24%, 1);
-    --chart-4: hsla(208, 53%, 32%, 1);
-    --chart-5: hsla(39, 92%, 59%, 1);
+  --chart-1: hsla(30, 72%, 48%, 1);
+  --chart-2: hsla(153, 23%, 46%, 1);
+  --chart-3: hsla(349, 98%, 24%, 1);
+  --chart-4: hsla(208, 53%, 32%, 1);
+  --chart-5: hsla(39, 92%, 59%, 1);
 
-    --chart-highlight-1: hsla(30, 72%, 88%, 1);
-    --chart-highlight-2: hsla(153, 23%, 86%, 1);
-    --chart-highlight-3: hsla(349, 98%, 94%, 1);
-    --chart-highlight-4: hsla(208, 53%, 90%, 1);
-    --chart-highlight-5: hsla(39, 92%, 95%, 1);
+  --chart-highlight-1: hsla(30, 72%, 88%, 1);
+  --chart-highlight-2: hsla(153, 23%, 86%, 1);
+  --chart-highlight-3: hsla(349, 98%, 94%, 1);
+  --chart-highlight-4: hsla(208, 53%, 90%, 1);
+  --chart-highlight-5: hsla(39, 92%, 95%, 1);
 
-    --font-body: 'Lato', -apple-system, 'Segoe UI', Helvetica Neue, Helvetica, Roboto, Arial,
-        sans-serif, system-ui, 'Apple Color Emoji', 'Segoe UI Emoji';
-    --color-error: hsla(356, 77%, 59%, 0.747);
+  --font-body: 'Lato', -apple-system, 'Segoe UI', Helvetica Neue, Helvetica, Roboto, Arial,
+    sans-serif, system-ui, 'Apple Color Emoji', 'Segoe UI Emoji';
+  --color-error: hsla(356, 77%, 59%, 0.747);
 }

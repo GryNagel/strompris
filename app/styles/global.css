@@ -2,182 +2,182 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Staatliches&display=swap');
 
 .container {
-    padding: 0 20px 40px 20px;
+  padding: 0 20px 40px 20px;
 }
 
 .app-logo {
-    font-family: 'Saira Condensed', sans-serif;
-    font-size: 25px;
-    color: var(--color-text);
-    text-align: center;
+  font-family: 'Saira Condensed', sans-serif;
+  font-size: 25px;
+  color: var(--color-text);
+  text-align: center;
 }
 
 .app-logo h1 {
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .app-logo:hover {
-    text-decoration: none;
-    transition: all 0.3s ease-in;
-    color: var(--color-links);
+  text-decoration: none;
+  transition: all 0.3s ease-in;
+  color: var(--color-links);
 }
 
 .app-logo:hover .lightning {
-    display: inline-block;
-    transition: all 0.3s ease-in;
-    transform: rotate(360deg);
+  display: inline-block;
+  transition: all 0.3s ease-in;
+  transform: rotate(360deg);
 }
 
 .app-logo:focus,
 .app-logo:active {
-    outline: none;
+  outline: none;
 }
 
 .app-line {
-    height: 5px;
-    display: block;
+  height: 5px;
+  display: block;
 }
 
 .app-header {
-    text-align: center;
-    padding: 20px 40px;
-    font-size: 24px;
+  text-align: center;
+  padding: 20px 40px;
+  font-size: 24px;
 }
 
 .app-logo-lines {
-    height: 4px;
-    width: 100%;
-    background: var(--color-text);
+  height: 4px;
+  width: 100%;
+  background: var(--color-text);
 }
 
 .app-logo-text {
-    padding: 0 20px;
-    flex-shrink: 0;
+  padding: 0 20px;
+  flex-shrink: 0;
 }
 
 .slogan {
-    display: inline;
+  display: inline;
 }
 
 .footer {
-    text-align: right;
-    padding: 40px 20px 20px 0;
-    font-size: 12px;
-    border-top: 2px solid var(--color-foreground);
-    margin: 0 40px;
+  text-align: right;
+  padding: 40px 20px 20px 0;
+  font-size: 12px;
+  border-top: 2px solid var(--color-foreground);
+  margin: 0 40px;
 }
 
 .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 .form-validation-error {
-    margin: 0;
-    margin-top: 0.25em;
-    color: var(--color-invalid);
-    font-size: 0.8rem;
+  margin: 0;
+  margin-top: 0.25em;
+  color: var(--color-invalid);
+  font-size: 0.8rem;
 }
 
 .error-wrapper {
-    text-align: center;
+  text-align: center;
 }
 
 .error-container {
-    background-color: var(--color-error);
-    border-radius: 0.25rem;
-    padding: 0.5rem 1rem;
+  background-color: var(--color-error);
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
 }
 
 .error-link {
-    color: var(--color-text);
+  color: var(--color-text);
 }
 
 .error-link:hover {
-    color: var(--color-background);
+  color: var(--color-background);
 }
 
 .button {
-    --shadow-color: hsl(var(--hs-links) 30%);
-    --shadow-size: 3px;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    cursor: pointer;
-    appearance: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--color-links);
-    color: var(--color-background);
-    font-family: var(--font-display);
-    font-weight: bold;
-    line-height: 1;
-    font-size: 1.125rem;
-    margin: 0;
-    padding: 0.625em 1em;
-    width: 100%;
-    border: 0;
-    border-radius: 4px;
-    box-shadow: 0 var(--shadow-size) 0 0 var(--shadow-color);
-    outline-offset: 2px;
-    transform: translateY(0);
-    transition: background-color 50ms ease-out, box-shadow 50ms ease-out,
-        transform 100ms cubic-bezier(0.3, 0.6, 0.8, 1.25);
+  --shadow-color: hsl(var(--hs-links) 30%);
+  --shadow-size: 3px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-links);
+  color: var(--color-background);
+  font-family: var(--font-display);
+  font-weight: bold;
+  line-height: 1;
+  font-size: 1.125rem;
+  margin: 0;
+  padding: 0.625em 1em;
+  width: 100%;
+  border: 0;
+  border-radius: 4px;
+  box-shadow: 0 var(--shadow-size) 0 0 var(--shadow-color);
+  outline-offset: 2px;
+  transform: translateY(0);
+  transition: background-color 50ms ease-out, box-shadow 50ms ease-out,
+    transform 100ms cubic-bezier(0.3, 0.6, 0.8, 1.25);
 }
 
 .button:hover {
-    --raise: 1px;
-    color: var(--color-background);
-    text-decoration: none;
-    box-shadow: 0 calc(var(--shadow-size) + var(--raise)) 0 0 var(--shadow-color);
-    transform: translateY(calc(var(--raise) * -1));
+  --raise: 1px;
+  color: var(--color-background);
+  text-decoration: none;
+  box-shadow: 0 calc(var(--shadow-size) + var(--raise)) 0 0 var(--shadow-color);
+  transform: translateY(calc(var(--raise) * -1));
 }
 
 .button:active {
-    --press: 1px;
-    box-shadow: 0 calc(var(--shadow-size) - var(--press)) 0 0 var(--shadow-color);
-    transform: translateY(var(--press));
-    background-color: var(--color-links-hover);
+  --press: 1px;
+  box-shadow: 0 calc(var(--shadow-size) - var(--press)) 0 0 var(--shadow-color);
+  transform: translateY(var(--press));
+  background-color: var(--color-links-hover);
 }
 
 .button[disabled],
 .button[aria-disabled='true'] {
-    transform: translateY(0);
-    pointer-events: none;
-    opacity: 0.7;
+  transform: translateY(0);
+  pointer-events: none;
+  opacity: 0.7;
 }
 
 .button:focus:not(:focus-visible) {
-    outline: none;
+  outline: none;
 }
 
 .form-validation-error {
-    margin: 0;
-    margin-top: 0.25em;
-    color: var(--color-invalid);
-    font-size: 0.8rem;
+  margin: 0;
+  margin-top: 0.25em;
+  color: var(--color-invalid);
+  font-size: 0.8rem;
 }
 
 .button-link {
-    color: var(--color-links);
-    text-decoration: none;
-    background: none;
-    border: none;
-    width: max-content;
+  color: var(--color-links);
+  text-decoration: none;
+  background: none;
+  border: none;
+  width: max-content;
 }
 
 .button-link:hover {
-    color: var(--color-links-hover);
-    text-decoration: underline;
-    cursor: pointer;
+  color: var(--color-links-hover);
+  text-decoration: underline;
+  cursor: pointer;
 }

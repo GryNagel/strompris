@@ -1,92 +1,84 @@
-import type { type MetaFunction } from "@remix-run/node";
-import { useCatch, useLoaderData } from "@remix-run/react";
+import type { LoaderFunction } from '@remix-run/node';
+import { useCatch, useLoaderData, useMatches } from '@remix-run/react';
 
+import type { Area } from '../../_constants';
 import { areas } from '../../_constants';
 
+import { PricesSchema } from '~/_models';
+import PriceChart from '~/components/PriceChart';
+
 type LoaderData = {
-    today: Price[] | null;
-    tomorrow?: Price[] | null;
-    areaName: string | undefined;
-    averagePriceToday: number;
-    averagePriceTomorrow: number | null;
+  area: Area | undefined;
 };
 
-export const meta: MetaFunction = ({ params }) => {
-    return {
-        title: `Strømpriser - ${areas.find((item) => item.number === params.area)?.title}`,
-    };
+export const loader: LoaderFunction = async ({ params }) => {
+  const area = Object.values(areas).find((value) => value.number === params.area);
+
+  return { area };
 };
-
-// export let loader: LoaderFunction = async ({ params }): Promise<LoaderData | null> => {
-//     if (!params.area || areas.find((item) => item.number === params.area) === undefined) {
-//         throw new Response(`Område "${params.area}" eksisterer ikke`, {
-//             status: 404,
-//         });
-//     }
-
-//     const { today, tomorrow } = getApiDates();
-
-//     let todayRes = await getPricesForArea(params.area, today);
-//     const isTomorrow = true;
-//     let tomorrowRes = await getPricesForArea(params.area, tomorrow, isTomorrow);
-
-//     if (!todayRes?.prices) {
-//         throw new Response('Ingen priser for i dag funnet 😢', {
-//             status: 404,
-//         });
-//     }
-
-//     return {
-//         today: todayRes.prices || null,
-//         tomorrow: tomorrowRes?.prices || null,
-//         averagePriceToday: calculateAveragePrice(todayRes?.prices),
-//         averagePriceTomorrow: tomorrowRes ? calculateAveragePrice(tomorrowRes.prices) : null,
-//         areaName: areas.find((item) => item.number === params.area)?.title,
-//     };
-// };
 
 export default function PriceRoute() {
-    let data = useLoaderData<LoaderData>();
+  const matches = useMatches();
+  const { area } = useLoaderData() as LoaderData;
 
-    // return (
-    //     <div>
-    //         <div className="price-chart">
-    //             {data.today && (
-    //                 <PriceChart
-    //                     today={data.today}
-    //                     tomorrow={data.tomorrow || []}
-    //                     areaName={data.areaName}
-    //                 />
-    //             )}
-    //         </div>
-    //         <div className="surcharge">
-    //             <div className="average">
-    //                 <h2>Dagens gjennomsnittspris for {data.areaName}:</h2>
-    //                 <p className="average-price">
-    //                     {data.averagePriceToday} <span className="average-suffix">NOK/kWh</span>
-    //                 </p>
-    //             </div>
-    //             {data.averagePriceTomorrow && (
-    //                 <div className="average">
-    //                     <h2>Morgendagens gjennomsnittspris for {data.areaName}:</h2>
-    //                     <p className="average-price">
-    //                         {data.averagePriceTomorrow}
-    //                         <span className="average-suffix">NOK/kWh</span>
-    //                         {data.averagePriceToday > data.averagePriceTomorrow ? '▼' : '▲'}
-    //                     </p>
-    //                 </div>
-    //             )}
-    //         </div>
-    //     </div>
-    // );
-    return <h1>area</h1>;
+  const data = matches.find((match) => match.id === 'routes/price')?.data;
+  const parsedToday = PricesSchema.safeParse(data?.today);
+  const parsedTomorrow = PricesSchema.safeParse(data?.tomorrow);
+
+  if (!data || !parsedToday.success || !area) {
+    throw new Error('No data to see here');
+  }
+
+  const todaysAverage = data?.todaysAveragePrices[area.original] || 0;
+  const tomorrowsAverage = data?.tomorrowsAveragePrices[area.original] || 0;
+
+  const today = parsedToday.data.priceByHour.pricesObj[area.original];
+  const tomorrow = parsedTomorrow.success
+    ? parsedTomorrow.data.priceByHour.pricesObj[area.original]
+    : [];
+
+  return (
+    <div>
+      <div className="price-chart">
+        <PriceChart
+          today={today}
+          hours={parsedToday.data.priceByHour.hours}
+          tomorrow={tomorrow}
+          areaName={area?.title}
+          areaNumber={area?.number}
+        />
+      </div>
+      <div className="surcharge">
+        <div className="average">
+          <h2>Dagens gjennomsnittspris for {area?.title}:</h2>
+          <p className="average-price">
+            {todaysAverage} <span className="average-suffix">NOK/kWh</span>
+          </p>
+        </div>
+        {tomorrowsAverage && (
+          <div className="average">
+            <h2>Morgendagens gjennomsnittspris for {area?.title}:</h2>
+            <p className="average-price">
+              {tomorrowsAverage}
+              <span className="average-suffix">øre/kWh</span>
+              {todaysAverage > tomorrowsAverage ? '▼' : '▲'}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export function CatchBoundary() {
-    const caught = useCatch();
+  const caught = useCatch();
 
-    if (caught.status === 404) {
-        return <div className="error-container">{caught.data}</div>;
-    }
-    throw new Error(`Her har det skjedd noe rart: ${caught.status}`);
+  if (caught.status === 404) {
+    return <div className="error-container">{caught.data}</div>;
+  }
+  throw new Error(`Her har det skjedd noe rart: ${caught.status}`);
+}
+
+export function ErrorBoundary({ error }: { error: Error }) {
+  return <div className="error-container">{error.message}</div>;
 }
