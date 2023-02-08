@@ -2,8 +2,6 @@
  * @type {import('@remix-run/dev/config').AppConfig}
  */
 module.exports = {
-    appDirectory: 'app',
-    browserBuildDirectory: 'public/build',
-    publicPath: '/build/',
-    serverBuildDirectory: 'api/build',
+  cacheDirectory: './node_modules/.cache/remix',
+  ignoredRouteFiles: ['**/.*', '**/*.css', '**/*.test.{js,jsx,ts,tsx}'],
 };
