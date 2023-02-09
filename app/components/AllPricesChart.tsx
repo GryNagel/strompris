@@ -3,10 +3,11 @@ import Highcharts from 'highcharts';
 import { format, setMinutes } from 'date-fns';
 import { addHours } from 'date-fns';
 
-import { areas, viewTimeFormat } from '../_constants';
-import { createIsoDate, createViewTime } from '../_utils/date';
+import { viewTimeFormat } from '../constants';
+import { createIsoDate, createViewTime } from '../utils/date';
 
-import type { CurrentPrice } from '~/_models';
+import type { CurrentPrice } from '~/types';
+import { areas } from '~/types';
 
 type PriceChartProps = {
   data: CurrentPrice;

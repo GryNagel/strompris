@@ -1,9 +1,9 @@
 import { isAfter, set, addDays } from 'date-fns';
 
-import { createApiDate } from './date';
+import { createApiDate } from '../utils/date';
 
-import type { Prices } from '~/_models';
-import { PricesSchema } from '~/_models';
+import type { Prices } from '~/types';
+import { PricesSchema } from '~/types';
 
 const apiUrl = 'https://redutv-api.vg.no/power-data/v2/nordpool/price-by-date';
 

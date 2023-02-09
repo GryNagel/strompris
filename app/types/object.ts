@@ -1,4 +1,4 @@
-import type { Entries } from '~/_models';
+import type { Entries } from '~/types';
 
 export const getKeys = Object.keys as <T extends object>(obj: T) => Array<keyof T>;
 

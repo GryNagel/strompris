@@ -3,16 +3,16 @@ import { addHours, isBefore, set, setMinutes } from 'date-fns';
 import type { LinksFunction } from '@remix-run/react/dist/routeModules';
 import type { HeadersFunction, LoaderFunction } from '@remix-run/node';
 
-import Header from '../components/Header';
+import { createViewTime, getHours } from '../utils/date';
 import Footer from '../components/Footer';
-import { createViewTime, getHours } from '../_utils/date';
+import Header from '../components/Header';
 
 import indexStylesUrl from '~/styles/index.css';
-import type { AveragePrices } from '~/_models';
-import { getTodaysPrices } from '~/_utils/api.server';
-import { areas } from '~/_constants';
-import { getAveragePrice } from '~/_utils/average.server';
-import { getEntries, getKeys } from '~/_utils/object';
+import type { AveragePrices } from '~/types';
+import { areas, getEntries, getKeys } from '~/types';
+import { getTodaysPrices } from '~/server/api.server';
+import { getAveragePrice } from '~/server/average.server';
+import AllPricesChart from '~/components/AllPricesChart';
 
 export const links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: indexStylesUrl }];
@@ -86,6 +86,7 @@ export default function IndexRoute() {
             ))}
           </ul>
         </nav>
+        <AllPricesChart data={averagePrices} />
       </div>
       <Footer />
     </div>

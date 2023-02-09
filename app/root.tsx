@@ -9,7 +9,6 @@ import {
   useCatch,
 } from '@remix-run/react';
 import type { LinksFunction } from '@remix-run/react/dist/routeModules';
-
 import defaultStylesUrl from '~/styles/default.css';
 import globalStylesUrl from '~/styles/global.css';
 import globalLargeStylesUrl from '~/styles/global-large.css';

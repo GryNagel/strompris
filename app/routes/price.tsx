@@ -1,15 +1,14 @@
 import { NavLink, Outlet, useLoaderData } from '@remix-run/react';
 import type { LinksFunction } from '@remix-run/node';
 
-import Header from '../components/Header';
-import { areas } from '../_constants';
 import Footer from '../components/Footer';
+import Header from '../components/Header';
 
 import priceStylesUrl from '~/styles/price.css';
-import { getTodaysPrices, getTomorrowsPrices } from '~/_utils/api.server';
-import { getEntries, getKeys } from '~/_utils/object';
-import { getAveragePrice } from '~/_utils/average.server';
-import type { AveragePrices, Cities, PriceByHour } from '~/_models';
+import { getTodaysPrices, getTomorrowsPrices } from '~/server/api.server';
+import { areas, getEntries, getKeys } from '~/types';
+import { getAveragePrice } from '~/server/average.server';
+import type { AveragePrices } from '~/types';
 
 export let links: LinksFunction = () => {
   return [{ rel: 'stylesheet', href: priceStylesUrl }];

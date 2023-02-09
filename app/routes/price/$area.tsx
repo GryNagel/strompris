@@ -1,10 +1,8 @@
 import type { LoaderFunction } from '@remix-run/node';
 import { useCatch, useLoaderData, useMatches } from '@remix-run/react';
 
-import type { Area } from '../../_constants';
-import { areas } from '../../_constants';
-
-import { PricesSchema } from '~/_models';
+import type { Area } from '~/types';
+import { areas, PricesSchema } from '~/types';
 import PriceChart from '~/components/PriceChart';
 
 type LoaderData = {

@@ -1,4 +1,4 @@
-import type { Cities } from '~/_models';
+import type { Cities } from '~/types';
 
 export type Area = {
   number: string;
