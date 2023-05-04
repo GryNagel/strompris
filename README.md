@@ -14,3 +14,4 @@ The application is built with [Remix](https://remix.run/).
 2. You need a postgres db
 3. Add api key and postgres db URl in a .env file (DATABASE_URL="db url here" and API_KEY="api key here")
 4. Run `npm i` and `npm run dev`
+5. Have fun!
